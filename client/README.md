@@ -1,16 +1,15 @@
-# React + Vite
+# Careloop clinic demo
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+React/Vite workspace for the Clinic SaaS API. The dashboard supports account sign-in and verification, clinic setup and profile editing, care team management, services and provider fees, recurring schedules, public slot availability, publishing checks, and Razorpay subscription checkout.
 
-Currently, two official plugins are available:
+## Run locally
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+1. Start the backend from `server` with its required `.env` values and MongoDB connection available. The API defaults to `http://localhost:5000`.
+2. From `client`, run `npm ci` and `npm run dev`.
+3. Open the Vite URL shown in the terminal. Vite forwards `/api` requests to `http://localhost:5000` so the HTTP-only login cookie works in local development.
 
-## React Compiler
+To use another API host in development, set `VITE_API_TARGET` before starting Vite. For a separately hosted API, set `VITE_API_URL`; the server must allow credentialed CORS from the client origin.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Backend boundaries
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Public clinic pages and availability use the API. The backend currently has no mounted route for creating booking holds or appointments, so the public demo lets visitors inspect slots and select a time but directs them to contact the clinic to request a visit. Subscription checkout is real and requires the backend's Razorpay keys and configured plan prices. Registration email verification requires the backend email provider configuration.
