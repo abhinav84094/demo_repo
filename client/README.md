@@ -1,6 +1,8 @@
 # Careloop clinic demo
 
-React/Vite workspace for the Clinic SaaS API. The dashboard supports account sign-in and verification, clinic setup and profile editing, care team management, services and provider fees, recurring schedules, public slot availability, publishing checks, and Razorpay subscription checkout.
+Responsive, monochrome React/Vite demo UI for the Clinic SaaS API. The app is divided into separate pages for authentication, clinic setup, overview, clinic profile, care team, services, weekly availability, website publishing, and the public clinic page. Shared controls and layout elements live under `src/components`.
+
+The interface supports account sign-in, registration and verification, password reset, clinic setup and profile editing, care team management, services and provider fees, recurring schedules, public slot availability, publishing checks, and Razorpay subscription checkout.
 
 ## Run locally
 

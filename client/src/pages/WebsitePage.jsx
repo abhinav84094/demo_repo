@@ -1,0 +1,18 @@
+import { Button, Icon, PageHeading, StatusChip } from '../components/ui/index.jsx'
+
+const requirements = [
+  ['Clinic name and URL', (readiness) => readiness && !readiness.missingRequirements.includes('clinic_name') && !readiness.missingRequirements.includes('clinic_slug'), 'clinic'],
+  ['Contact phone', (readiness) => readiness && !readiness.missingRequirements.includes('contact_phone'), 'clinic'],
+  ['Clinic location', (readiness) => readiness && !readiness.missingRequirements.includes('address_city') && !readiness.missingRequirements.includes('address_state'), 'clinic'],
+  ['Active care professional', (readiness) => readiness && !readiness.missingRequirements.includes('active_doctor'), 'team'],
+  ['Active subscription', (readiness) => readiness && !readiness.missingRequirements.includes('active_subscription'), 'website'],
+]
+
+export default function WebsitePage({ clinic, readiness, busy, onNavigate, onPublish, onCheckout, onPreview }) {
+  return <><PageHeading title="Public website" description="Review the clinic page and complete the publishing requirements." action={clinic.status === 'active' && <StatusChip tone="black">Published</StatusChip>}/>
+    <section className="website-banner"><span className="eyebrow">YOUR CLINIC PAGE</span><h2>{clinic.status === 'active' ? 'Your website is live.' : 'Prepare your public page.'}</h2><p>Patients can learn about your practice, meet the team, and see available appointment times.</p><div className="website-url"><Icon name="globe" size={16}/><span>careloop.health/{clinic.slug}</span>{clinic.status === 'active' && <button onClick={() => { navigator.clipboard?.writeText(`${window.location.origin}/clinic/${clinic.slug}`) }}>Copy link</button>}</div></section>
+    <div className="website-columns"><section className="panel readiness-panel"><div className="panel-heading"><div><span className="eyebrow">PUBLISHING CHECKLIST</span><h2>Requirements</h2></div><StatusChip tone={readiness?.ready ? 'black' : 'neutral'}>{readiness?.ready ? 'Ready' : 'In progress'}</StatusChip></div><div className="readiness-list">{requirements.map(([label, done, page]) => <div className="readiness-item" key={label}><span className={`readiness-check ${done(readiness) ? 'readiness-done' : ''}`}>{done(readiness) && <Icon name="check" size={12}/>}</span><span>{label}</span>{!done(readiness) && <button onClick={() => onNavigate(page)}>Complete</button>}</div>)}</div>{clinic.status === 'active' ? <Button onClick={onPreview}>Preview website<Icon name="arrow" size={14}/></Button> : <Button disabled={busy || !readiness?.canPublish} onClick={onPublish}>{busy ? 'Publishing…' : 'Publish website'}<Icon name="arrow" size={14}/></Button>}</section>
+      <section className="panel subscription-panel"><span className="eyebrow">SUBSCRIPTION</span><h2>Basic plan</h2><p>An active subscription is required to publish the clinic and enable online booking.</p><div className="plan-status"><StatusChip tone={readiness?.subscriptionStatus === 'active' ? 'black' : 'neutral'}>{readiness?.subscriptionStatus || 'pending'}</StatusChip><small>Checkout is processed by Razorpay.</small></div><Button variant="outline" disabled={busy || readiness?.subscriptionStatus === 'active'} onClick={onCheckout}>{readiness?.subscriptionStatus === 'active' ? 'Plan active' : 'Complete subscription'}</Button></section></div>
+    <section className="panel preview-panel"><div className="table-heading"><div><span className="eyebrow">PAGE PREVIEW</span><h2>{clinic.name}</h2><p>{clinic.description || 'Your clinic introduction will appear here.'}</p></div><Button variant="outline" onClick={onPreview}>Preview page<Icon name="arrow" size={14}/></Button></div></section>
+  </>
+}
